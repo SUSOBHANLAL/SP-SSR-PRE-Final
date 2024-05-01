@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin Login</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background: linear-gradient(to bottom, #3494e6, #ec6ead);
+        /* Same gradient background */
+        color: #fff;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+      }
+
+      .container {
+        text-align: center;
+        background-color: rgba(255, 255, 255, 0.2);
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+      }
+
+      h1 {
+        color: #333;
+      }
+
+      .login-form {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .form-input {
+        width: 100%;
+        margin: 10px 0;
+        padding: 10px;
+        border: none;
+        border-radius: 5px;
+      }
+
+      .login-button {
+        background-color: #ff5733;
+        /* Login button background color */
+        color: #fff;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+        font-size: 16px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+      }
+
+      .login-button:hover {
+        background-color: #ff8040;
+        /* Login button background color on hover */
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="container">
+      <h1>Admin Login</h1>
+      <form class="login-form" method="post">
+        <input
+          class="form-input"
+          type="text"
+          name="username"
+          id="username"
+          placeholder="Username"
+          required
+        />
+        <input
+          class="form-input"
+          type="password"
+          name="password"
+          id="password"
+          placeholder="Password"
+          required
+        />
+        <button class="login-button" type="submit" id="submit">Login</button
+        ><br />
+        <button class="login-button" id="backEntry">Back</button>
+      </form>
+    </div>
+    <script>
+      const admin = "superadmin";
+      const password = "password#123";
+
+      document
+        .getElementById("submit")
+        .addEventListener("click", function (event) {
+          event.preventDefault(); // Prevent the form from submitting
+
+          const userName = document.getElementById("username").value;
+          const userPassword = document.getElementById("password").value;
+
+          if (userName === admin && userPassword === password) {
+            window.location.href = "download_csv.html";
+          } else {
+            alert("Wrong Username and Password");
+          }
+        });
+
+      backEntry.addEventListener("click", function () {
+        window.location.href = "entry.html";
+      });
+
+      window.oncontextmenu = function () {
+        return false; // Disable right-click context menu
+      };
+    </script>
+  </body>
+</html>

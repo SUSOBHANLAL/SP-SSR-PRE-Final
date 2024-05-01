@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Your Website Title</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background: linear-gradient(
+          to bottom,
+          #3494e6,
+          #ec6ead
+        ); /* Gradient background */
+        color: #fff; /* Text color */
+        margin: 0;
+        padding: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+      }
+
+      .container {
+        padding: 5px;
+        margin: 20px;
+        text-align: center;
+        background-color: rgba(
+          255,
+          255,
+          255,
+          0.2
+        ); /* Slightly transparent white background */
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+      }
+
+      h1 {
+        color: #333;
+      }
+
+      .user-button,
+      .admin-button,
+      .back {
+        background-color: #9a2c35; /* Unique button background color */
+        color: #fff;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+        font-size: 16px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+      }
+
+      .user-button:hover,
+      .admin-button:hover {
+        background-color: #d04141; /* Button background color on hover */
+      }
+
+      button + button {
+        margin-left: 10px;
+      }
+
+      /* Glass-like popup styling */
+      #popup {
+        display: none;
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: rgba(
+          255,
+          255,
+          255,
+          0.2
+        ); /* Slightly transparent white background */
+        backdrop-filter: blur(10px); /* Glass-like blur effect */
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+        text-align: center;
+        padding: 20px;
+      }
+
+      #popup label {
+        display: block;
+        margin-bottom: 10px;
+        color: #fff; /* Label text color */
+      }
+
+      #emulatorName {
+        width: 100%;
+        padding: 10px;
+        box-sizing: border-box;
+        margin-bottom: 15px;
+        border: none;
+        border-radius: 5px;
+        background-color: rgba(
+          255,
+          255,
+          255,
+          0.5
+        ); /* Slightly transparent white background for input */
+        color: #333; /* Input text color */
+      }
+
+      #submitEmulator,
+      #submitClear {
+        background-color: #4caf50;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+        font-size: 16px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+      }
+
+      #submitEmulator:hover {
+        background-color: #45a049;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Do you want to participate in the survey?</h1>
+      <button class="back" id="backButton">Back</button>
+      <button class="user-button" id="yesButton">Yes</button>
+      <button class="admin-button" id="noButton">No</button>
+    </div>
+
+    <!-- Popup HTML -->
+    <div id="popup">
+      <label for="emulatorName">Enter Emulator's Name:</label>
+      <input type="text" id="emulatorName" required />
+      <button id="submitEmulator">Submit</button>
+      <button id="submitClear">clear</button>
+    </div>
+
+    <script>
+      var formArray = ["formfirst", "formsecond", "formthird"];
+      var modechoice0 = ["m1", "m2", "m3", "m4"];
+      var modechoice1 = ["m21", "m22", "m23", "m24"];
+      var modechoice2 = ["m31", "m32", "m33", "m34"];
+      var modechoice3 = ["m41", "m42", "m43", "m44"];
+      var modechoice4 = ["m51", "m52", "m53", "m54"];
+      var modechoice5 = ["m61", "m62", "m63", "m64"];
+
+      var imageIds = []; // initially image Ids is empty array  here i am inserting the random choosen modechoice array
+
+      var routechoice0 = ["r1", "r2", "r3", "r4"];
+      var routechoice1 = ["r21", "r22", "r23", "r24"];
+      var routechoice2 = ["r31", "r32", "r33", "r34"];
+      var routechoice3 = ["r41", "r42", "r43", "r44"];
+      var routechoice4 = ["r51", "r52", "r53", "r54"];
+      var routechoice5 = ["r61", "r62", "r63", "r64"];
+      var routeimageIds = [];
+      var connectedarray = [];
+      const userButton = document.getElementById("yesButton");
+      const adminButton = document.getElementById("noButton");
+      const popup = document.getElementById("popup");
+
+      backButton.addEventListener("click", function () {
+        window.location.href = "index.html";
+      });
+      yesButton.addEventListener("click", function () {
+        window.location.href = "servey.html";
+
+        modechoiceArray = Math.floor(Math.random() * 6); // it will return a value from 0 to 5
+        routechoiceArray = Math.floor(Math.random() * 6);
+
+        console.log("this sis the random mode id" + modechoiceArray);
+        console.log("this sis the random route id" + routechoiceArray);
+        if (modechoiceArray === 0) {
+          imageIds = shuffleArray(modechoice0);
+        }
+        if (modechoiceArray === 1) {
+          imageIds = shuffleArray(modechoice1);
+        }
+        if (modechoiceArray === 2) {
+          imageIds = shuffleArray(modechoice2);
+        }
+        if (modechoiceArray === 3) {
+          imageIds = shuffleArray(modechoice3);
+        }
+        if (modechoiceArray === 4) {
+          imageIds = shuffleArray(modechoice4);
+        }
+        if (modechoiceArray === 5) {
+          imageIds = shuffleArray(modechoice5);
+        }
+
+        if (routechoiceArray === 0) {
+          routeimageIds = shuffleArray(routechoice0);
+        }
+        if (routechoiceArray === 1) {
+          routeimageIds = shuffleArray(routechoice1);
+        }
+        if (routechoiceArray === 2) {
+          routeimageIds = shuffleArray(routechoice2);
+        }
+        if (routechoiceArray === 3) {
+          routeimageIds = shuffleArray(routechoice3);
+        }
+        if (routechoiceArray === 4) {
+          routeimageIds = shuffleArray(routechoice4);
+        }
+        if (routechoiceArray === 5) {
+          routeimageIds = shuffleArray(routechoice5);
+        }
+
+        modeORroute = Math.floor(Math.random() * 2);
+
+        if (modeORroute === 1) {
+          connectedarray = [...formArray, ...routeimageIds, ...imageIds];
+          connectedarray.push("lastsubmission");
+        } else if (modeORroute === 0) {
+          connectedarray = [...formArray, ...imageIds, ...routeimageIds];
+          connectedarray.push("lastsubmission");
+        }
+
+        // Store the array in sessionStorage
+        sessionStorage.setItem("route", JSON.stringify(connectedarray));
+      });
+
+      adminButton.addEventListener("click", function () {
+        // Show the popup when "No" button is clicked
+        popup.style.display = "block";
+      });
+
+      document
+        .getElementById("submitEmulator")
+        .addEventListener("click", function () {
+          const emulatorName = document.getElementById("emulatorName").value;
+
+          if (emulatorName) {
+            // Get user's location
+            getUserLocation(emulatorName);
+
+            // Hide the popup after submitting
+            popup.style.display = "none";
+          } else {
+            alert("Please enter the emulator's name.");
+          }
+        });
+
+      document
+        .getElementById("submitClear")
+        .addEventListener("click", function () {
+          location.reload();
+        });
+
+      // Function to get the current date and time in a formatted string
+      function getCurrentDateTime() {
+        const now = new Date();
+        const year = now.getFullYear();
+        const month = (now.getMonth() + 1).toString().padStart(2, "0");
+        const day = now.getDate().toString().padStart(2, "0");
+        const hours = now.getHours().toString().padStart(2, "0");
+        const minutes = now.getMinutes().toString().padStart(2, "0");
+        const seconds = now.getSeconds().toString().padStart(2, "0");
+        return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+      }
+
+      function getUserLocation(emulatorName) {
+        if ("geolocation" in navigator) {
+          navigator.geolocation.getCurrentPosition(function (position) {
+            const latitude = position.coords.latitude;
+            const longitude = position.coords.longitude;
+            const dateTime = getCurrentDateTime();
+
+            const formDataObject = {
+              EmulatorName: emulatorName,
+              LatitudeNo: latitude,
+              LongitudeNo: longitude,
+              DateTimeNo: dateTime,
+            };
+
+            // Push the form data to local storage
+            if (localStorage.formdata) {
+              const existingData = JSON.parse(localStorage.formdata);
+              existingData.push(formDataObject);
+              localStorage.formdata = JSON.stringify(existingData);
+            } else {
+              localStorage.formdata = JSON.stringify([formDataObject]);
+            }
+            alert("Location and time have been saved.");
+          });
+        } else {
+          alert("Check the internet connection");
+        }
+      }
+      window.oncontextmenu = function () {
+        return false; // Disable right-click context menu
+      };
+
+      function shuffleArray(array) {
+        for (var i = array.length - 1; i > 0; i--) {
+          var j = Math.floor(Math.random() * (i + 1));
+          var temp = array[i];
+          array[i] = array[j];
+          array[j] = temp;
+        }
+        return array;
+      }
+    </script>
+  </body>
+</html>

@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Your Website Title</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background: linear-gradient(to bottom, #3494e6, #ec6ead);
+        /* Gradient background */
+        color: #fff;
+        /* Text color */
+        margin: 0;
+        padding: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+      }
+
+      .container {
+        padding: 5px;
+        margin: 20px;
+        text-align: center;
+        background-color: rgba(255, 255, 255, 0.2);
+        /* Slightly transparent white background */
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+      }
+
+      h1 {
+        color: #333;
+      }
+
+      .user-button {
+        background-color: #9a2c35;
+        /* Unique button background color */
+        color: #fff;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+        font-size: 16px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+      }
+
+      .user-button:hover {
+        background-color: #d04141;
+        /* Button background color on hover */
+      }
+
+      #adminButton {
+        position: absolute;
+        bottom: 10px;
+        right: 10px;
+      }
+
+      .admin-button:hover {
+        background-color: #3853ab;
+        /* Button background color on hover */
+      }
+
+      button + button {
+        margin-left: 10px;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="container">
+      <h1>Survey webapp for TUTEM</h1>
+      <button class="user-button" id="userButton">Start Survey</button>
+    </div>
+    <label id="adminButton">Admin Login</label>
+    <script>
+      const userButton = document.getElementById("userButton");
+      const adminButton = document.getElementById("adminButton");
+
+      userButton.addEventListener("click", function () {
+        window.location.href = "entry.html";
+        var myArray = [1, 2, 3, 4, 5];
+        sessionStorage.setItem("sharedArray", JSON.stringify(myArray));
+      });
+
+      adminButton.addEventListener("click", function () {
+        window.location.href = "admin.html";
+      });
+
+      window.oncontextmenu = function () {
+        return false; // Disable right-click context menu
+      };
+    </script>
+  </body>
+</html>

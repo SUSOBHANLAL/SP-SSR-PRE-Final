@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Download Page</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background: linear-gradient(to bottom, #3494e6, #ec6ead);
+        color: #fff;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+      }
+
+      .container {
+        background-color: rgba(255, 255, 255, 0.2);
+        padding: 20px;
+        border-radius: 10px;
+        text-align: center;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+      }
+
+      h1 {
+        color: #333;
+      }
+
+      .buttons {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
+
+      .button {
+        background-color: #ff5733;
+        color: #fff;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+        font-size: 16px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+      }
+
+      .button:hover {
+        background-color: #ff8040;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="container">
+      <h1>Download Sections</h1>
+      <div class="buttons">
+        <button class="button" id="noSurvey">No survey</button>
+        <button class="button" id="download">Download data</button>
+        <button class="button" id="clearData">Clear Data</button>
+        <button class="button" id="backadmin">Back</button>
+      </div>
+    </div>
+
+    <script>
+      backadmin.addEventListener("click", function () {
+        window.location.href = "admin.html";
+      });
+      // Retrieve data from local storage
+      const formData = JSON.parse(localStorage.formdata || "[]");
+
+      document
+        .getElementById("noSurvey")
+        .addEventListener("click", function () {
+          // Create a header row with column names
+          const headerRow = ["Enumerator", "Latitude", "Longitude", "DateTime"];
+
+          // Filter and map the formData to exclude rows with empty values
+          const filteredData = formData.filter(
+            (row) =>
+              row.EmulatorName != undefined &&
+              row.LatitudeNo !== undefined &&
+              row.LongitudeNo !== undefined &&
+              row.DateTimeNo
+          );
+
+          // Combine the header row and filtered data rows
+          const csvData = [
+            headerRow,
+            ...filteredData.map((row) => [
+              row.EmulatorName,
+              row.LatitudeNo,
+              row.LongitudeNo,
+              row.DateTimeNo,
+            ]),
+          ];
+
+          // Create a CSV string
+          const csvContent =
+            "data:text/csv;charset=utf-8," +
+            csvData.map((row) => row.join(",")).join("\n");
+
+          // Create a download link and trigger the download
+          const encodedUri = encodeURI(csvContent);
+          const link = document.createElement("a");
+          link.setAttribute("href", encodedUri);
+          link.setAttribute("download", "No_survey-data.csv");
+          document.body.appendChild(link);
+          link.click();
+        });
+
+      document
+        .getElementById("download")
+        .addEventListener("click", function () {
+          // Create a header row with column names
+          const headerRow = [
+            "Ename",
+            "Route",
+            "Gender",
+            "Age",
+            "Income",
+            "Employment",
+            "Education",
+            "OriginArea",
+            "OriginPin",
+            "DestinationArea",
+            "DestinationPin",
+            "City",
+            "StartdateTime",
+            "EndDateTime",
+            "Latitude",
+            "Longitude",
+            "Q9",
+            "Q10",
+            "Q11",
+            "Q12",
+            "OriginType",
+            "StartingTime",
+            "Duration",
+            "B-Options",
+            "WaitingTime",
+            "C_to_E",
+            "WaitingTimeE",
+            "DurationF",
+            "F_options",
+            "DestinationType",
+            "EndTime",
+            "Q13i",
+            "Q13s",
+            "Q14i",
+            "Q14s",
+            "Q15i",
+            "Q15s",
+            "Q16i",
+            "Q16s",
+            "Q17i",
+            "Q17s",
+            "Q18i",
+            "Q18s",
+            "Q19i",
+            "Q19s",
+            "Q20i",
+            "Q20s",
+            "Q21i",
+            "Q21s",
+            "Q22i",
+            "Q22s",
+            "Q23i",
+            "Q23s",
+            "Q24i",
+            "Q24s",
+            "Q25i",
+            "Q25s",
+            "Q26i",
+            "Q26s",
+            "Q27i",
+            "Q27s",
+            "Q28i",
+            "Q28s",
+            "Q29i",
+            "Q29s",
+            "Q30i",
+            "Q30s",
+            "Q31i",
+            "Q31s",
+            "Q32i",
+            "Q32s",
+            "Q33i",
+            "Q33s",
+            "fQ13i",
+            "fQ13s",
+            "fQ14i",
+            "fQ14s",
+            "fQ15i",
+            "fQ15s",
+            "fQ16i",
+            "fQ16s",
+            "fQ17i",
+            "fQ17s",
+            "fQ18i",
+            "fQ18s",
+            "fQ19i",
+            "fQ19s",
+            "fQ20i",
+            "fQ20s",
+            "fQ21i",
+            "fQ21s",
+            "fQ22i",
+            "fQ22s",
+            "fQ23i",
+            "fQ23s",
+            "fQ24i",
+            "fQ24s",
+            "fQ25i",
+            "fQ25s",
+            "fQ26i",
+            "fQ26s",
+            "fQ27i",
+            "fQ27s",
+            "fQ28i",
+            "fQ28s",
+            "fQ29i",
+            "fQ29s",
+            "fQ30i",
+            "fQ30s",
+            "fQ31i",
+            "fQ31s",
+            "fQ32i",
+            "fQ32s",
+            "fQ33i",
+            "fQ33s",
+            "Q34",
+            "Q35",
+            "Q36",
+            "Q37",
+            "Q38",
+            "Q39",
+            "Q40",
+            "Q40_a",
+            "Q40_b",
+            "Smart_Phone",
+            "Data_Package",
+            "Q41",
+            "Q42",
+            "Q43",
+            "Q44",
+            "Q45",
+            "o1i",
+            "o1s",
+            "o2i",
+            "o2s",
+            "o3i",
+            "o3s",
+            "o4i",
+            "o4s",
+            "o5i",
+            "o5s",
+            "o6i",
+            "o6s",
+            "o7i",
+            "o7s",
+          ];
+
+          const filteredData = formData.filter((row) => row.Ename != undefined);
+
+          // Combine the header row and data rows
+          const csvData = [
+            headerRow,
+            ...filteredData.map((row) => [
+              row.Ename,
+              row.Route,
+              row.Gender,
+              row.Age,
+              row.Income,
+              row.Employment,
+              row.Education,
+              row.OriginArea,
+              row.OriginPin,
+              row.DestinationArea,
+              row.DestinationPin,
+              row.City,
+              row.StartdateTime,
+              row.DateTime,
+              row.Latitude,
+              row.Longitude,
+              row.TravelWork,
+              row.TravelPartner,
+              row.TravelPurpose,
+              row.Travel11,
+              row.OriginType,
+              row.StartingTime,
+              row.Duration,
+              row.Transportation,
+              row.WaitingTime,
+              row.CToe,
+              row.WaitingTimeE,
+              row.Durationf,
+              row.Ftransportation,
+              row.DestinationType,
+              row.EndTime,
+              row.Q13i,
+              row.Q13s,
+              row.Q14i,
+              row.Q14s,
+              row.Q15i,
+              row.Q15s,
+              row.Q16i,
+              row.Q16s,
+              row.Q17i,
+              row.Q17s,
+              row.Q18i,
+              row.Q18s,
+              row.Q19i,
+              row.Q19s,
+              row.Q20i,
+              row.Q20s,
+              row.Q21i,
+              row.Q21s,
+              row.Q22i,
+              row.Q22s,
+              row.Q23i,
+              row.Q23s,
+              row.Q24i,
+              row.Q24s,
+              row.Q25i,
+              row.Q25s,
+              row.Q26i,
+              row.Q26s,
+              row.Q27i,
+              row.Q27s,
+              row.Q28i,
+              row.Q28s,
+              row.Q29i,
+              row.Q29s,
+              row.Q30i,
+              row.Q30s,
+              row.Q31i,
+              row.Q31s,
+              row.Q32i,
+              row.Q32s,
+              row.Q33i,
+              row.Q33s,
+              row.fQ13i,
+              row.fQ13s,
+              row.fQ14i,
+              row.fQ14s,
+              row.fQ15i,
+              row.fQ15s,
+              row.fQ16i,
+              row.fQ16s,
+              row.fQ17i,
+              row.fQ17s,
+              row.fQ18i,
+              row.fQ18s,
+              row.fQ19i,
+              row.fQ19s,
+              row.fQ20i,
+              row.fQ20s,
+              row.fQ21i,
+              row.fQ21s,
+              row.fQ22i,
+              row.fQ22s,
+              row.fQ23i,
+              row.fQ23s,
+              row.fQ24i,
+              row.fQ24s,
+              row.fQ25i,
+              row.fQ25s,
+              row.fQ26i,
+              row.fQ26s,
+              row.fQ27i,
+              row.fQ27s,
+              row.fQ28i,
+              row.fQ28s,
+              row.fQ29i,
+              row.fQ29s,
+              row.fQ30i,
+              row.fQ30s,
+              row.fQ31i,
+              row.fQ31s,
+              row.fQ32i,
+              row.fQ32s,
+              row.fQ33i,
+              row.fQ33s,
+              row.Q34,
+              row.Q35,
+              row.Q36,
+              row.Q37,
+              row.Q38,
+              row.Q39,
+              row.Q40,
+              row.Q40a,
+              row.Q40b,
+              row.smartphone,
+              row.data_package,
+              row.Q41,
+              row.Q42,
+              row.Q43,
+              row.Q44,
+              row.Q45,
+              row.o1i,
+              row.o1s,
+              row.o2i,
+              row.o2s,
+              row.o3i,
+              row.o3s,
+              row.o4i,
+              row.o4s,
+              row.o5i,
+              row.o5s,
+              row.o6i,
+              row.o6s,
+              row.o7i,
+              row.o7s,
+            ]),
+          ];
+
+          // Create a CSV string
+          const csvContent =
+            "data:text/csv;charset=utf-8," +
+            csvData.map((row) => row.join(",")).join("\n");
+
+          // Create a download link and trigger the download
+          const encodedUri = encodeURI(csvContent);
+          const link = document.createElement("a");
+          link.setAttribute("href", encodedUri);
+          link.setAttribute("download", "Download-data.csv");
+          document.body.appendChild(link);
+          link.click();
+        });
+      document
+        .getElementById("clearData")
+        .addEventListener("click", function () {
+          // Show a confirmation dialog
+          const userConfirmed = confirm(
+            "Are you sure you want to clear all data?"
+          );
+
+          // Check if the user clicked "OK"
+          if (userConfirmed) {
+            // Clear all data from local storage
+            localStorage.removeItem("formdata");
+            location.reload();
+          }
+        });
+
+      window.oncontextmenu = function () {
+        return false; // Disable right-click context menu
+      };
+    </script>
+  </body>
+</html>
