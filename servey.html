@@ -101,14 +101,14 @@
             <div class="gender-category">
               <input type="radio" name="age" value="15-24" required />
               <label for="gender">15-24</label>
-              <input type="radio" name="age" value="25-39" required />
-              <label for="gender">25-39</label>
-              <input type="radio" name="age" value="40-54" required />
-              <label for="gender">40-54</label>
-              <input type="radio" name="age" value="55-64" required />
-              <label for="gender">55-64</label>
-              <input type="radio" name="age" value="65+" required />
-              <label for="gender">65+</label>
+              <input type="radio" name="age" value="25-44" required />
+              <label for="gender">25-44</label>
+              <input type="radio" name="age" value="45-59" required />
+              <label for="gender">45-59</label>
+              <input type="radio" name="age" value="60+" required />
+              <label for="gender">60+</label>
+              <!-- <input type="radio" name="age" value="65+" required />
+              <label for="gender">65+</label> -->
             </div>
             <span class="gender-title _Income"
               >Annual Income<span class="required">*</span></span
@@ -287,7 +287,7 @@
               <label for="">more than 6 times</label>
             </div>
             <span class="gender-title"
-              >With whom do you usually travel to public transport for?</span
+              >With whom do you usually travel to public transport stop?</span
             >
             <div class="gender-category">
               <input type="radio" name="travel_partner" value="1" required />
@@ -342,18 +342,18 @@
             </div>
 
             <span class="gender-title"
-              >How seldom do you use public transport for the purpose mentioned
-              in above question?</span
+              >How frequently do you use public transport for the purpose
+              mentioned in above question?</span
             >
             <div class="gender-category">
               <input type="radio" name="travel_11" value="1" required />
-              <label for="">Once a month or less</label>
+              <label for="">Once in a month or less</label>
               <input type="radio" name="travel_11" value="2" required />
-              <label for="">Once every 3 weeks</label>
+              <label for="">Once in every 3 weeks</label>
               <input type="radio" name="travel_11" value="3" required />
-              <label for="">Once every 2 weeks</label>
+              <label for="">Once in every 2 weeks</label>
               <input type="radio" name="travel_11" value="4" required />
-              <label for="">Once every week</label>
+              <label for="">Once in every week</label>
               <input type="radio" name="travel_11" value="5" required />
               <label for="">More than once a week</label>
             </div>
@@ -366,7 +366,13 @@
             <div class="text-container">
               <p>Origin Type</p>
               <div class="input_boxx">
-                <input type="text" name="originType" required />
+                <input type="text" name="originType" list="options" required />
+                <datalist id="options">
+                  <option value="Home"></option>
+                  <option value="Office"></option>
+                  <option value="School"></option>
+                  <option value="Workplace"></option>
+                </datalist>
               </div>
             </div>
             <div class="text-container">
@@ -622,7 +628,20 @@
             <div class="text-container">
               <p>Destination Type</p>
               <div class="input_boxx">
-                <input type="text" name="destinationType" required />
+                <input
+                  type="text"
+                  name="destinationType"
+                  required
+                  list="options"
+                  required
+                />
+
+                <datalist id="options">
+                  <option value="Home"></option>
+                  <option value="Office"></option>
+                  <option value="School"></option>
+                  <option value="Workplace"></option>
+                </datalist>
               </div>
             </div>
             <div class="text-container">
