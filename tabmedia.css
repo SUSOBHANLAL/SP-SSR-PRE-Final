@@ -2,12 +2,14 @@
   .mainheader {
     display: flex;
     text-align: center;
+    justify-content: center;
     font-style: oblique 40deg;
     font-family: "Times New Roman";
     font-weight: bold;
     font-size: 17px;
-    margin-left: 16%;
+    margin-left: 0%;
   }
+
   /* +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
 
   .form-first {
@@ -120,9 +122,7 @@
   .m1-sixth-row {
     margin-bottom: 1%;
   }
-  .mainheader {
-    margin-left: 25%;
-  }
+
   .mainsection {
     background-color: linear-gradient(to bottom, #3494e6, #ec6ead);
     margin-left: 2%;
@@ -231,7 +231,7 @@
   #m24 {
     display: flex;
     width: 95%;
-    background-color: #193362;
+    background-color: #53b1c6;
     padding-left: 3%;
     padding-right: 2%;
     padding-top: 2%;

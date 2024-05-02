@@ -1,6 +1,7 @@
 var connectedArr = [];
 var deleteName = [];
 var currentIndex = 0;
+var togglepage = 0;
 
 startservey();
 
@@ -46,31 +47,32 @@ function displayImage() {
   if (deleteName.length != 0) {
     for (var i = 0; i < deleteName.length; i++) {
       document.getElementById(deleteName[i]).style.display = "none";
-      //   document.getElementById("lastsubmission").style.display = "none";
-      //   document.getElementById("formfirst").style.display = "none";
-      //   document.getElementById("formsecond").style.display = "none";
-      //   document.getElementById("formthird").style.display = "none";
     }
   }
 
   var imageId = connectedArr[currentIndex];
 
   if (imageId === "formfirst") {
+    togglepage = 1;
     document.getElementById(imageId).style.display = "block";
     deleteName.push(imageId);
   } else if (imageId === "formsecond") {
+    togglepage = 1;
     document.getElementById(imageId).style.display = "block";
     deleteName.push(imageId);
   } else if (imageId === "formthird") {
+    togglepage = 1;
     deleteName.push(imageId);
     document.getElementById(imageId).style.display = "block";
   } else if (imageId === "lastsubmission") {
+    togglepage = 1;
     document.getElementById(imageId).style.display = "block";
     deleteName.push(imageId);
   } else {
     shuffleDivs(imageId);
     deleteName.push(imageId);
     document.getElementById(imageId).style.display = "block";
+    togglepage = 0;
   }
 }
 
@@ -78,7 +80,11 @@ function displayImage() {
 function saveAndNext() {
   // currentIndex = (currentIndex + 1) % connectedArr.length;
   currentIndex = currentIndex + 1;
-  displayImage();
+  if (togglepage === 1) {
+    displayImage();
+  } else {
+    alert("please fill one of them!");
+  }
 }
 
 // Function to navigate to the previous image
@@ -122,65 +128,150 @@ function shuffleDivs(id) {
 }
 
 function updatePageNumbers(id, count) {
+  var pageno = count + 1;
   const container = document.getElementById(id);
   const containerM1 = container.querySelector(".container");
   const pagenoElement = containerM1.querySelector(".pageno");
   // Append text to the existing content
-  pagenoElement.textContent = "Page " + count + "... 12";
+  pagenoElement.textContent = "Page " + pageno + "of" + " 11";
+}
+
+function toggleNextButtonVisibility() {
+  togglepage = 1;
 }
 
 // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 document.getElementById("next1").addEventListener("click", function () {
   // Reset the color for all fields before performing validation
-  // resetFieldColors();
   saveAndNext();
+  resetFieldColors();
 
-  const genderSelected = document.querySelector('input[name="gender"]:checked');
-  const enameField = document.querySelector('input[name="ename"]').value.trim();
-  const routeField = document.querySelector('input[name="route"]');
-  const incomeSelected = document.querySelector('input[name="income"]:checked');
-  const ageSelected = document.querySelector('input[name="age"]:checked');
-  const employmentSelected = document.querySelector(
-    'input[name="employment"]:checked'
+  let isValid = true;
+  let isValidNumber = true;
+
+  // Validate text input fields
+  function validateTextField(field, query) {
+    if (!field) {
+      document.querySelector(query).style.border = "2px solid red";
+      isValid = false;
+    }
+  }
+
+  // Validate radio button groups
+  function validateRadioGroup(fieldName) {
+    const radioGroup = document.querySelectorAll(
+      `input[name="${fieldName}"]:checked`
+    );
+    if (radioGroup.length === 0) {
+      // Check if any radio buttons in the group are checked
+      document
+        .querySelectorAll(`input[name="${fieldName}"]`)
+        .forEach((radio) => {
+          radio.parentElement.style.color = "red"; // Change parent element's color or some other indicator
+        });
+      isValid = false;
+    }
+  }
+
+  // Validate text fields for length and specific numeric conditions
+  function validateTextFieldLength(fieldValue, querySelector, length) {
+    const inputElement = document.querySelector(querySelector);
+    if (!fieldValue || fieldValue.length !== length) {
+      inputElement.style.border = "2px solid red";
+      isValidNumber = false;
+    }
+  }
+
+  validateTextField(
+    document.querySelector('input[name="ename"]').value.trim(),
+    'input[name="ename"]'
   );
-  const educationSelected = document.querySelector(
-    'input[name="education"]:checked'
+  validateTextField(
+    document.querySelector('input[name="route"]').value.trim(),
+    'input[name="route"]'
   );
-  const originareaField = document.querySelector('input[name="origin_area"]');
-  const originpinField = document.querySelector('input[name="origin_pin"]');
-  const destinationareaField = document.querySelector(
+  validateTextField(
+    document.querySelector('input[name="origin_area"]').value.trim(),
+    'input[name="origin_area"]'
+  );
+  // Origin Pin specific validation for 6 digits
+  const originPinField = document
+    .querySelector('input[name="origin_pin"]')
+    .value.trim();
+  validateTextFieldLength(originPinField, 'input[name="origin_pin"]', 6);
+
+  validateTextField(
+    document.querySelector('input[name="destination_area"]').value.trim(),
     'input[name="destination_area"]'
   );
-  const destinationpinField = document.querySelector(
-    'input[name="destination_pin"]'
+  const destinationPinField = document
+    .querySelector('input[name="destination_pin"]')
+    .value.trim();
+  validateTextFieldLength(
+    destinationPinField,
+    'input[name="destination_pin"]',
+    6
   );
-  const cityselected = document.querySelector('input[name="city"]:checked');
 
-  if (enameField) {
-    document.querySelector(".form-first").style.display = "none";
-    document.querySelector(".form-second").style.display = "block";
-    if ((document.querySelector(".form-second").style.display = "block")) {
+  // Validate radio button groups
+  validateRadioGroup("gender");
+  validateRadioGroup("income");
+  validateRadioGroup("age");
+  validateRadioGroup("employment");
+  validateRadioGroup("education");
+  validateRadioGroup("city");
+
+  if (isValid) {
+    if (isValidNumber) {
+      saveAndNext();
+    } else {
+      alert("Please enter 6 digit.");
     }
   } else {
-    alert("Please fill the Enumerator's Name");
+    alert("Please fill all fields correctly.");
   }
 });
+
+function resetFieldColors() {
+  document.querySelectorAll('input[type="text"]').forEach((input) => {
+    input.style.border = "";
+    input.addEventListener("input", function () {
+      input.style.border = "";
+    });
+  });
+
+  document.querySelectorAll('input[type="number"]').forEach((input) => {
+    input.style.border = "";
+    input.addEventListener("input", function () {
+      input.style.border = "";
+    });
+  });
+  document.querySelectorAll('input[type="time"]').forEach((input) => {
+    input.style.border = "";
+    input.addEventListener("input", function () {
+      input.style.border = "";
+    });
+  });
+  document.querySelectorAll('input[type="radio"]').forEach((radio) => {
+    radio.parentElement.style.color = "";
+    radio.addEventListener("change", function () {
+      if (this.checked) {
+        Array.from(
+          document.querySelectorAll(`input[name="${this.name}"]`)
+        ).forEach((radio) => {
+          radio.parentElement.style.color = "";
+        });
+      }
+    });
+  });
+}
 
 function alertAndColor(message, fieldClass) {
   alert(message);
   const fields = document.querySelectorAll(`.${fieldClass}`);
   fields.forEach((field) => {
     field.style.color = "red";
-  });
-}
-
-function resetFieldColors() {
-  const fields = document.querySelectorAll(
-    ".GenderColor, ._Ename, ._Route, ._Income, ._Age, ._Employment, ._Education, ._origin-area, ._origin-pin, ._Destination-area, ._Destination-pin, ._City"
-  );
-  fields.forEach((field) => {
-    field.style.color = ""; // Reset the color to the default
   });
 }
 
@@ -214,162 +305,274 @@ document.getElementById("OtherPartner").addEventListener("change", function () {
 
 document.getElementById("next2").addEventListener("click", function () {
   saveAndNext();
-  const travel_work = document.querySelector(
-    'input[name="travel_work"]:checked'
-  );
-  const travel_partner = document.querySelector(
-    'input[name="travel_partner"]:checked'
-  );
-  const travel_purpose = document.querySelector(
-    'input[name="travel_purpose"]:checked'
-  );
-  const travel_11 = document.querySelector('input[name="travel_11"]:checked');
-  const Q34 = document.querySelector('input[name="Q34"]:checked');
-  const Q35 = document.querySelector('input[name="Q35"]:checked');
-  const Q36 = document.querySelector('input[name="Q36"]:checked');
-  const Q37 = document.querySelector('input[name="Q37"]:checked');
-  const Q38 = document.querySelector('input[name="Q38"]:checked');
-  const Q39 = document.querySelector('input[name="Q39"]:checked');
-  const Q40 = document.querySelector('input[name="Q40"]:checked');
-  const Q40a = document.querySelector('input[name="Q40a"]:checked');
-  const Q40b = document.querySelector('input[name="Q40b"]:checked');
-  const originType = document
-    .querySelector('input[name="originType"]')
-    .value.trim();
-  const startingTime = document
-    .querySelector('input[name="startingTime"]')
-    .value.trim();
-  const duration = document
-    .querySelector('input[name="duration"]')
-    .value.trim();
-  const transportation = document.querySelector(
-    'input[name="transportation"]:checked'
-  );
-  const waitingTime = document
-    .querySelector('input[name="waitingTime"]')
-    .value.trim();
-  const cToe = document.querySelector('input[name="cToe"]:checked');
-  const waitingTimeE = document
-    .querySelector('input[name="waitingTimeE"]')
-    .value.trim();
-  const durationf = document
-    .querySelector('input[name="durationf"]')
-    .value.trim();
-  const ftransportation = document.querySelector(
-    'input[name="ftransportation"]:checked'
-  );
-  const destinationType = document
-    .querySelector('input[name="destinationType"]')
-    .value.trim();
-  const endTime = document.querySelector('input[name="endTime"]').value.trim();
+  resetFieldColors();
+  let isValid = true;
+
+  // Fetching the checked value for transportation mode
   let columnB = document.querySelector('input[name="transportation"]:checked')
     ? document.querySelector('input[name="transportation"]:checked').value
     : "";
+
+  // Group questions based on transportation mode
+  const walkingOrBicycleQuestions = [
+    "Q13s",
+    "Q14s",
+    "Q15s",
+    "Q16s",
+    "Q17s",
+    "Q18s",
+    "Q19s",
+    "Q20s",
+    "Q21s",
+    "overall-Fb-nmt",
+  ];
+  const autoRelatedQuestions = [
+    "Q22s",
+    "Q23s",
+    "Q24s",
+    "Q25s",
+    "Q26s",
+    "Q27s",
+    "Q28s",
+    "overall-Fb-para",
+  ];
+  const personalVehicleQuestions = [
+    "Q29s",
+    "Q30s",
+    "Q31s",
+    "Q32s",
+    "Q33s",
+    "overall-Fb-personal",
+  ];
+
+  // Validate based on selected transportation mode
+  if (columnB === "walk" || columnB === "bicycle") {
+    for (var i = 0; i < walkingOrBicycleQuestions.length; i++) {
+      if (
+        !document.querySelector(
+          `input[name="${walkingOrBicycleQuestions[i]}"]:checked`
+        )
+      ) {
+        document
+          .querySelectorAll(`input[name="${walkingOrBicycleQuestions[i]}"]`)
+          .forEach((input) => {
+            input.parentElement.style.color = "red";
+          });
+        isValid = false;
+      }
+    }
+  } else if (
+    columnB === "auto" ||
+    columnB === "auto_app" ||
+    columnB === "cab" ||
+    columnB === "cab(app)" ||
+    columnB === "2-Wheeler(app)"
+  ) {
+    for (var i = 0; i < autoRelatedQuestions.length; i++) {
+      if (
+        !document.querySelector(
+          `input[name="${autoRelatedQuestions[i]}"]:checked`
+        )
+      ) {
+        document
+          .querySelectorAll(`input[name="${autoRelatedQuestions[i]}"]`)
+          .forEach((input) => {
+            input.parentElement.style.color = "red";
+          });
+        isValid = false;
+      }
+    }
+  } else if (
+    columnB === "personal_car" ||
+    columnB === "personal_2-wheeler" ||
+    columnB === "drop-off"
+  ) {
+    for (var i = 0; i < personalVehicleQuestions.length; i++) {
+      if (
+        !document.querySelector(
+          `input[name="${personalVehicleQuestions[i]}"]:checked`
+        )
+      ) {
+        document
+          .querySelectorAll(`input[name="${personalVehicleQuestions[i]}"]`)
+          .forEach((input) => {
+            input.parentElement.style.color = "red";
+          });
+        isValid = false;
+      }
+    }
+  }
+
+  // Fetching the checked value for final transportation mode
   let columnF = document.querySelector('input[name="ftransportation"]:checked')
     ? document.querySelector('input[name="ftransportation"]:checked').value
     : "";
 
-  //B nmt mode
+  // Group questions based on final transportation mode
+  const walkBicycleQuestionsF = [
+    "fQ13s",
+    "fQ14s",
+    "fQ15s",
+    "fQ16s",
+    "fQ17s",
+    "fQ18s",
+    "fQ19s",
+    "fQ20s",
+    "fQ21s",
+    "overall-Ff-nmt",
+  ];
+  const autoRelatedQuestionsF = [
+    "fQ22s",
+    "fQ23s",
+    "fQ24s",
+    "fQ25s",
+    "fQ26s",
+    "fQ27s",
+    "fQ28s",
+    "overall-Ff-para",
+  ];
+  const personalVehicleQuestionsF = [
+    "fQ29s",
+    "fQ30s",
+    "fQ31s",
+    "fQ32s",
+    "fQ33s",
+    "overall-Ff-personal",
+  ];
 
-  const Q13ichecked = document.querySelector('input[name="Q13i"]:checked');
-  const Q13schecked = document.querySelector('input[name="Q13s"]:checked');
-  const Q14ichecked = document.querySelector('input[name="Q14i"]:checked');
-  const Q14schecked = document.querySelector('input[name="Q14s"]:checked');
-  const Q15ichecked = document.querySelector('input[name="Q15i"]:checked');
-  const Q15schecked = document.querySelector('input[name="Q15s"]:checked');
-  const Q16ichecked = document.querySelector('input[name="Q16i"]:checked');
-  const Q16schecked = document.querySelector('input[name="Q16s"]:checked');
-  const Q17ichecked = document.querySelector('input[name="Q17i"]:checked');
-  const Q17schecked = document.querySelector('input[name="Q17s"]:checked');
-  const Q18ichecked = document.querySelector('input[name="Q18i"]:checked');
-  const Q18schecked = document.querySelector('input[name="Q18s"]:checked');
-  const Q19ichecked = document.querySelector('input[name="Q19i"]:checked');
-  const Q19schecked = document.querySelector('input[name="Q19s"]:checked');
-  const Q20ichecked = document.querySelector('input[name="Q20i"]:checked');
-  const Q20schecked = document.querySelector('input[name="Q20s"]:checked');
-  const Q21ichecked = document.querySelector('input[name="Q21i"]:checked');
-  const Q21schecked = document.querySelector('input[name="Q21s"]:checked');
+  // Validate based on selected final transportation mode
+  if (columnF === "walk" || columnF === "bicycle") {
+    for (var i = 0; i < walkBicycleQuestionsF.length; i++) {
+      if (
+        !document.querySelector(
+          `input[name="${walkBicycleQuestionsF[i]}"]:checked`
+        )
+      ) {
+        document
+          .querySelectorAll(`input[name="${walkBicycleQuestionsF[i]}"]`)
+          .forEach((input) => {
+            input.parentElement.style.color = "red";
+          });
+        isValid = false;
+      }
+    }
+  } else if (
+    columnF === "auto" ||
+    columnF === "auto_app" ||
+    columnF === "cab" ||
+    columnF === "cab(app)" ||
+    columnF === "2-wheeler(app)"
+  ) {
+    for (var i = 0; i < autoRelatedQuestionsF.length; i++) {
+      if (
+        !document.querySelector(
+          `input[name="${autoRelatedQuestionsF[i]}"]:checked`
+        )
+      ) {
+        document
+          .querySelectorAll(`input[name="${autoRelatedQuestionsF[i]}"]`)
+          .forEach((input) => {
+            input.parentElement.style.color = "red";
+          });
+        isValid = false;
+      }
+    }
+  } else if (
+    columnF === "personal_car" ||
+    columnF === "personal_2-wheeler" ||
+    columnF === "drop-off"
+  ) {
+    for (var i = 0; i < personalVehicleQuestionsF.length; i++) {
+      if (
+        !document.querySelector(
+          `input[name="${personalVehicleQuestionsF[i]}"]:checked`
+        )
+      ) {
+        document
+          .querySelectorAll(`input[name="${personalVehicleQuestionsF[i]}"]`)
+          .forEach((input) => {
+            input.parentElement.style.color = "red";
+          });
+        isValid = false;
+      }
+    }
+  }
 
-  //B paratransit mode
+  const fieldsToCheck = [
+    "travel_work",
+    "travel_partner",
+    "travel_purpose",
+    "travel_11",
+    "Q34",
+    "Q35",
+    "Q36",
+    "Q37",
+    "Q38",
+    "Q39",
+    "transportation",
+    "cToe",
+    "ftransportation",
+  ];
 
-  const Q22ichecked = document.querySelector('input[name="Q22i"]:checked');
-  const Q22schecked = document.querySelector('input[name="Q22s"]:checked');
-  const Q23ichecked = document.querySelector('input[name="Q23i"]:checked');
-  const Q23schecked = document.querySelector('input[name="Q23s"]:checked');
-  const Q24ichecked = document.querySelector('input[name="Q24i"]:checked');
-  const Q24schecked = document.querySelector('input[name="Q24s"]:checked');
-  const Q25ichecked = document.querySelector('input[name="Q25i"]:checked');
-  const Q25schecked = document.querySelector('input[name="Q25s"]:checked');
-  const Q26ichecked = document.querySelector('input[name="Q26i"]:checked');
-  const Q26schecked = document.querySelector('input[name="Q26s"]:checked');
-  const Q27ichecked = document.querySelector('input[name="Q27i"]:checked');
-  const Q27schecked = document.querySelector('input[name="Q27s"]:checked');
-  const Q28ichecked = document.querySelector('input[name="Q28i"]:checked');
-  const Q28schecked = document.querySelector('input[name="Q28s"]:checked');
+  // Check if radio buttons are selected
+  fieldsToCheck.forEach((fieldName) => {
+    if (!document.querySelector(`input[name="${fieldName}"]:checked`)) {
+      isValid = false;
+      // Apply error styling or message for radio button groups
+      document
+        .querySelectorAll(`input[name="${fieldName}"]`)
+        .forEach((input) => {
+          input.parentElement.style.color = "red"; // Assuming the parent element should indicate the error
+        });
+    }
+  });
 
-  //B personal mode
+  // Check if text inputs have values
+  const textFields = [
+    { name: "originType", minLength: 1 },
+    { name: "startingTime", minLength: 1 },
+    { name: "duration", minLength: 1 },
+    { name: "waitingTime", minLength: 1 },
+    { name: "waitingTimeE", minLength: 1 },
+    { name: "durationf", minLength: 1 },
+    { name: "destinationType", minLength: 1 },
+    { name: "endTime", minLength: 1 },
+  ];
 
-  const Q29ichecked = document.querySelector('input[name="Q29i"]:checked');
-  const Q29schecked = document.querySelector('input[name="Q29s"]:checked');
-  const Q30ichecked = document.querySelector('input[name="Q30i"]:checked');
-  const Q30schecked = document.querySelector('input[name="Q30s"]:checked');
-  const Q31ichecked = document.querySelector('input[name="Q31i"]:checked');
-  const Q31schecked = document.querySelector('input[name="Q31s"]:checked');
-  const Q32ichecked = document.querySelector('input[name="Q32i"]:checked');
-  const Q32schecked = document.querySelector('input[name="Q32s"]:checked');
-  const Q33ichecked = document.querySelector('input[name="Q33i"]:checked');
-  const Q33schecked = document.querySelector('input[name="Q33s"]:checked');
+  textFields.forEach((field) => {
+    const inputElement = document.querySelector(`input[name="${field.name}"]`);
+    if (inputElement.value.trim().length < field.minLength) {
+      isValid = false;
+      inputElement.style.border = "2px solid red"; // Apply error styling
+    }
+  });
 
-  //f nmt mode
+  // Validate Q40 and its dependencies
+  const q40 = document.querySelector('input[name="Q40"]:checked');
+  if (!q40) {
+    isValid = false;
+    document.querySelectorAll('input[name="Q40"]').forEach((input) => {
+      input.parentElement.style.color = "red";
+    });
+  } else if (q40.value === "1") {
+    // Check if Q40 is 1
+    ["Q40a", "Q40b"].forEach((fieldName) => {
+      if (!document.querySelector(`input[name="${fieldName}"]:checked`)) {
+        isValid = false;
+        document
+          .querySelectorAll(`input[name="${fieldName}"]`)
+          .forEach((input) => {
+            input.parentElement.style.color = "red";
+          });
+      }
+    });
+  }
 
-  const fQ13ichecked = document.querySelector('input[name="fQ13i"]:checked');
-  const fQ13schecked = document.querySelector('input[name="fQ13s"]:checked');
-  const fQ14ichecked = document.querySelector('input[name="fQ14i"]:checked');
-  const fQ14schecked = document.querySelector('input[name="fQ14s"]:checked');
-  const fQ15ichecked = document.querySelector('input[name="fQ15i"]:checked');
-  const fQ15schecked = document.querySelector('input[name="fQ15s"]:checked');
-  const fQ16ichecked = document.querySelector('input[name="fQ16i"]:checked');
-  const fQ16schecked = document.querySelector('input[name="fQ16s"]:checked');
-  const fQ17ichecked = document.querySelector('input[name="fQ17i"]:checked');
-  const fQ17schecked = document.querySelector('input[name="fQ17s"]:checked');
-  const fQ18ichecked = document.querySelector('input[name="fQ18i"]:checked');
-  const fQ18schecked = document.querySelector('input[name="fQ18s"]:checked');
-  const fQ19ichecked = document.querySelector('input[name="fQ19i"]:checked');
-  const fQ19schecked = document.querySelector('input[name="fQ19s"]:checked');
-  const fQ20ichecked = document.querySelector('input[name="fQ20i"]:checked');
-  const fQ20schecked = document.querySelector('input[name="fQ20s"]:checked');
-  const fQ21ichecked = document.querySelector('input[name="fQ21i"]:checked');
-  const fQ21schecked = document.querySelector('input[name="fQ21s"]:checked');
-
-  //f paratransit mode
-
-  const fQ22ichecked = document.querySelector('input[name="fQ22i"]:checked');
-  const fQ22schecked = document.querySelector('input[name="fQ22s"]:checked');
-  const fQ23ichecked = document.querySelector('input[name="fQ23i"]:checked');
-  const fQ23schecked = document.querySelector('input[name="fQ23s"]:checked');
-  const fQ24ichecked = document.querySelector('input[name="fQ24i"]:checked');
-  const fQ24schecked = document.querySelector('input[name="fQ24s"]:checked');
-  const fQ25ichecked = document.querySelector('input[name="fQ25i"]:checked');
-  const fQ25schecked = document.querySelector('input[name="fQ25s"]:checked');
-  const fQ26ichecked = document.querySelector('input[name="fQ26i"]:checked');
-  const fQ26schecked = document.querySelector('input[name="fQ26s"]:checked');
-  const fQ27ichecked = document.querySelector('input[name="fQ27i"]:checked');
-  const fQ27schecked = document.querySelector('input[name="fQ27s"]:checked');
-  const fQ28ichecked = document.querySelector('input[name="fQ28i"]:checked');
-  const fQ28schecked = document.querySelector('input[name="fQ28s"]:checked');
-
-  //f personal mode
-
-  const fQ29ichecked = document.querySelector('input[name="fQ29i"]:checked');
-  const fQ29schecked = document.querySelector('input[name="fQ29s"]:checked');
-  const fQ30ichecked = document.querySelector('input[name="fQ30i"]:checked');
-  const fQ30schecked = document.querySelector('input[name="fQ30s"]:checked');
-  const fQ31ichecked = document.querySelector('input[name="fQ31i"]:checked');
-  const fQ31schecked = document.querySelector('input[name="fQ31s"]:checked');
-  const fQ32ichecked = document.querySelector('input[name="fQ32i"]:checked');
-  const fQ32schecked = document.querySelector('input[name="fQ32s"]:checked');
-  const fQ33ichecked = document.querySelector('input[name="fQ33i"]:checked');
-  const fQ33schecked = document.querySelector('input[name="fQ33s"]:checked');
+  if (isValid) {
+    saveAndNext();
+  } else {
+    alert("Please fill all required fields correctly.");
+  }
 });
 
 document.getElementById("back2").addEventListener("click", function () {
@@ -378,7 +581,56 @@ document.getElementById("back2").addEventListener("click", function () {
 
 // +++++++++++++++++++++++++++++++++++++next button 3+++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 document.getElementById("next3").addEventListener("click", function () {
-  saveAndNext();
+  let isValid = true;
+  let isSmartPhone = document.querySelector('input[name="smartPhone"]:checked')
+    ? document.querySelector('input[name="smartPhone"]:checked').value
+    : "";
+  const fieldsToCheck = ["data_package", "Q41", "Q42", "Q43", "Q44", "Q45"];
+  const fieldsTocheckForCsection = [
+    "smartPhone",
+    "o1s",
+    "o2s",
+    "o3s",
+    "o4s",
+    "o5s",
+    "o6s",
+    "o7s",
+  ];
+  for (var i = 0; i < fieldsTocheckForCsection.length; i++) {
+    if (
+      !document.querySelector(
+        `input[name="${fieldsTocheckForCsection[i]}"]:checked`
+      )
+    ) {
+      document
+        .querySelectorAll(`input[name="${fieldsTocheckForCsection[i]}"]`)
+        .forEach((input) => {
+          input.parentElement.style.color = "red";
+        });
+      isValid = false;
+    }
+  }
+
+  if (isSmartPhone === "1") {
+    for (var i = 0; i < fieldsToCheck.length; i++) {
+      if (
+        !document.querySelector(`input[name="${fieldsToCheck[i]}"]:checked`)
+      ) {
+        document
+          .querySelectorAll(`input[name="${fieldsToCheck[i]}"]`)
+          .forEach((input) => {
+            input.parentElement.style.color = "red";
+          });
+        isValid = false;
+      }
+    }
+  }
+
+  if (isValid) {
+    saveAndNext();
+  } else {
+    alert("Please fill all required fields correctly.");
+  }
 });
 
 // ++++++++++++++++++++++++++++++++++++++++++++the image section+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
